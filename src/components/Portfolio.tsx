@@ -30,7 +30,7 @@ export default function Portfolio({ projects, isStandalone = false, onBackToHome
   const [activeTab, setActiveTab] = useState<string>("전체");
   const [activeMediaTab, setActiveMediaTab] = useState<"image" | "video">("image");
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
-  const [visibleCount, setVisibleCount] = useState<number>(4);
+  const [visibleCount, setVisibleCount] = useState<number>(6);
 
   const tabs = [
     { label: "전체", value: "전체" },
@@ -111,7 +111,7 @@ export default function Portfolio({ projects, isStandalone = false, onBackToHome
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-zinc-600 mt-4 max-w-xl mx-auto text-sm leading-relaxed"
+            className="text-zinc-600 mt-4 text-sm leading-relaxed whitespace-nowrap max-w-none mx-auto block overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
             기획력과 데이터 시공성을 아우르는 대표 실적입니다. 각 피드를 클릭해 마케팅 실적, 타겟층 지표 분석 제안서를 투명하게 확인해보세요.
           </motion.p>
@@ -243,11 +243,11 @@ export default function Portfolio({ projects, isStandalone = false, onBackToHome
         </motion.div>
 
         {/* Load More & Collapse Buttons */}
-        {filteredProjects.length > 4 && (
+        {filteredProjects.length > 6 && (
           <div className="flex justify-center mt-12">
             {visibleCount < filteredProjects.length ? (
               <button
-                onClick={() => setVisibleCount((prev) => Math.min(prev + 4, filteredProjects.length))}
+                onClick={() => setVisibleCount((prev) => Math.min(prev + 6, filteredProjects.length))}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-[#8b5cf6]/40 rounded-xl text-xs sm:text-sm font-bold text-zinc-700 hover:text-[#8b5cf6] shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group active:scale-95"
               >
                 <span>더보기</span>
@@ -256,7 +256,7 @@ export default function Portfolio({ projects, isStandalone = false, onBackToHome
             ) : (
               <button
                 onClick={() => {
-                  setVisibleCount(4);
+                  setVisibleCount(6);
                   // Smoothly scroll back to the portfolio section top
                   const portfolioSection = document.getElementById("portfolio");
                   if (portfolioSection) {

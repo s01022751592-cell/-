@@ -87,7 +87,7 @@ export default function Process({ isStandalone = false, onBackToHome }: ProcessP
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-zinc-600 mt-4 max-w-xl mx-auto text-sm leading-relaxed"
+            className="text-zinc-600 mt-4 text-sm leading-relaxed whitespace-nowrap max-w-none mx-auto block overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
             체계적이고 투명한 단계를 밟아 누락 없이 완벽한 컨셉을 일순화하고, 최상의 하이엔드 퀄리티 결과물을 완결 지어 드립니다.
           </motion.p>

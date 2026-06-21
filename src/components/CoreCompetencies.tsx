@@ -77,7 +77,7 @@ export default function CoreCompetencies({ isStandalone = false, onBackToHome }:
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-zinc-400 mt-4 max-w-xl mx-auto text-sm leading-relaxed"
+            className="text-zinc-400 mt-4 text-sm leading-relaxed whitespace-nowrap max-w-none mx-auto block overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
             기존의 화려하기만 한 슬로건을 탈피하고, 실용적이고 즉각 적용 가능한 마케팅과 디자인의 정밀 조형적 접점을 실체화합니다.
           </motion.p>

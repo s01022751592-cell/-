@@ -125,7 +125,7 @@ export default function Contact({ isStandalone = false, onBackToHome, profile }:
             프로젝트 의뢰 및 파트너십 문의
           </motion.h2>
           <div className="w-12 h-1 bg-[#8b5cf6] mx-auto mt-4 rounded" />
-          <p className="text-zinc-400 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
+          <p className="text-zinc-400 mt-4 text-sm leading-relaxed whitespace-nowrap max-w-none mx-auto block overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             데이터 기반의 정밀한 마케팅 성향 수집과 조형미 넘치는 고품격 시각화 역량이 필요하시다면 아래의 신청 서신을 작성해주시기 바랍니다.
           </p>
         </div>

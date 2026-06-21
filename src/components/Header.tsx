@@ -60,14 +60,14 @@ export default function Header({
               <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#8b5cf6] to-[#5b21b6] flex items-center justify-center text-white font-extrabold text-sm shadow-[0_0_15px_rgba(139,92,246,0.3)] select-none">
                 YS
               </span>
-              <span className="text-white font-semibold text-lg tracking-tight group-hover:text-[#8b5cf6] transition-colors">
-                {profileName || "신윤섭"} <span className="text-[10px] bg-[#1a1b22] text-[#a78bfa] font-semibold px-2 py-0.5 rounded ml-1 border border-[#8b5cf6]/20">Official Portfolio</span>
+              <span className="text-white font-semibold text-base lg:text-lg tracking-tight group-hover:text-[#8b5cf6] transition-colors whitespace-nowrap">
+                {profileName || "신윤섭"} <span className="hidden lg:inline-block text-[10px] bg-[#1a1b22] text-[#a78bfa] font-semibold px-2 py-0.5 rounded ml-1 border border-[#8b5cf6]/20">Official Portfolio</span>
               </span>
             </button>
           </div>
 
           {/* Navigation Controls Mode Toggler (Unique Feature!) */}
-          <div className="hidden lg:flex items-center bg-[#1a1b22] px-3 py-1 rounded-full border border-[#272735] text-[11px] font-bold text-zinc-400 gap-2 select-none">
+          <div className="hidden xl:flex items-center bg-[#1a1b22] px-3 py-1 rounded-full border border-[#272735] text-[11px] font-bold text-zinc-400 gap-2 select-none">
             <span className={`${navigationMode === "onepage" ? "text-[#a78bfa]" : "text-zinc-500"}`}>
               원페이지 스크롤
             </span>
@@ -88,14 +88,14 @@ export default function Header({
           </div>
 
           {/* Desktop Navigation Link Tabs */}
-          <nav className="hidden md:flex items-center space-x-6">
+          <nav className="hidden md:flex items-center space-x-1.5 lg:space-x-4 xl:space-x-6 flex-nowrap">
             {menuItems.map((item) => {
               const isActive = currentSection === item.value;
               return (
                 <button
                   key={item.value}
                   onClick={(e) => handleNavClick(e, item.value)}
-                  className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${
+                  className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs lg:text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap ${
                     isActive
                       ? "text-[#a78bfa] bg-[#8b5cf6]/10 border border-[#8b5cf6]/30"
                       : "text-zinc-400 hover:text-zinc-100 hover:bg-[#1a1b22]/50"
@@ -109,19 +109,19 @@ export default function Header({
           </nav>
 
           {/* Admin Tools trigger */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-1.5 lg:gap-3 flex-nowrap">
             {isAdmin ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 lg:gap-2 flex-nowrap">
                 <button
                   onClick={onOpenAdminPanel}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#272735] text-[#a78bfa] border border-[#8b5cf6]/30 hover:border-[#8b5cf6] hover:bg-[#34344c] transition-all cursor-pointer"
+                  className="flex items-center gap-1 lg:gap-1.5 px-2 py-1.5 rounded-lg text-[11px] lg:text-xs font-semibold bg-[#272735] text-[#a78bfa] border border-[#8b5cf6]/30 hover:border-[#8b5cf6] hover:bg-[#34344c] transition-all cursor-pointer whitespace-nowrap"
                 >
-                  <Settings className="w-3.5 h-3.5 animate-spin-slow" />
+                  <Settings className="w-3 h-3 lg:w-3.5 lg:h-3.5 animate-spin-slow" />
                   관리자 콘솔
                 </button>
                 <button
                   onClick={onLogout}
-                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-zinc-400 bg-red-950/20 border border-red-900/30 hover:bg-red-900/50 hover:text-white transition-colors cursor-pointer"
+                  className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-[11px] lg:text-xs font-medium text-zinc-400 bg-red-950/20 border border-red-900/30 hover:bg-red-900/50 hover:text-white transition-colors cursor-pointer whitespace-nowrap"
                 >
                   <Unlock className="w-3.5 h-3.5" />
                   로그아웃
@@ -130,9 +130,9 @@ export default function Header({
             ) : (
               <button
                 onClick={onOpenLogin}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white bg-[#15161b] hover:bg-[#202126] border border-[#272735] transition-colors cursor-pointer"
+                className="flex items-center gap-1 lg:gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] lg:text-xs font-medium text-zinc-400 hover:text-white bg-[#15161b] hover:bg-[#202126] border border-[#272735] transition-colors cursor-pointer whitespace-nowrap"
               >
-                <Lock className="w-3.5 h-3.5 text-[#8b5cf6]" />
+                <Lock className="w-3 h-3 lg:w-3.5 lg:h-3.5 text-[#8b5cf6]" />
                 관리자 로그인
               </button>
             )}
