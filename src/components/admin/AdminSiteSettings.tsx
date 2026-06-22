@@ -229,6 +229,53 @@ export default function AdminSiteSettings({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    onUpdateConfig({
+      name: formName.trim(),
+      email: formEmail.trim(),
+      phone: formPhone.trim(),
+      summary: formSummary.trim(),
+      heroHeadline: formHeroHeadline.trim(),
+      
+      eduYear: eduYear.trim(),
+      eduTitle: eduTitle.trim(),
+      eduSubtitle: eduSubtitle.trim(),
+      
+      internYear: internYear.trim(),
+      internTitle: internTitle.trim(),
+      internSubtitle: internSubtitle.trim(),
+
+      intern2Year: intern2Year.trim(),
+      intern2Title: intern2Title.trim(),
+      intern2Subtitle: intern2Subtitle.trim(),
+      
+      skillDesign1_name: skillDesign1Name.trim(),
+      skillDesign1_level: Number(skillDesign1Level),
+      skillDesign1_desc: skillDesign1Desc.trim(),
+      
+      skillDesign2_name: skillDesign2Name.trim(),
+      skillDesign2_level: Number(skillDesign2Level),
+      skillDesign2_desc: skillDesign2Desc.trim(),
+      
+      skillDesign3_name: skillDesign3Name.trim(),
+      skillDesign3_level: Number(skillDesign3Level),
+      skillDesign3_desc: skillDesign3Desc.trim(),
+      
+      skillMarketing1_name: skillMarketing1Name.trim(),
+      skillMarketing1_level: Number(skillMarketing1Level),
+      skillMarketing1_desc: skillMarketing1Desc.trim(),
+      
+      skillMarketing2_name: skillMarketing2Name.trim(),
+      skillMarketing2_level: Number(skillMarketing2Level),
+      skillMarketing2_desc: skillMarketing2Desc.trim(),
+      
+      skillPlanning1_name: skillPlanning1Name.trim(),
+      skillPlanning1_level: Number(skillPlanning1Level),
+      skillPlanning1_desc: skillPlanning1Desc.trim(),
+      
+      skillPlanning2_name: skillPlanning2Name.trim(),
+      skillPlanning2_level: Number(skillPlanning2Level),
+      skillPlanning2_desc: skillPlanning2Desc.trim()
+    });
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
   };
@@ -278,7 +325,6 @@ export default function AdminSiteSettings({
         setSkillPlanning2Name("ChatGPT Prompting");
         setSkillPlanning2Level(90);
         setSkillPlanning2Desc("맞춤형 페르소나 설정 및 시장 트렌드 마이닝 최적화 프롬프트 설계");
-        setFormResumeText(DEFAULT_RESUME_TEXT);
       }, 100);
     }
   };
@@ -388,6 +434,71 @@ export default function AdminSiteSettings({
               className="w-full bg-[#121316] border border-[#272735] rounded-lg p-3 text-xs text-zinc-200 focus:outline-none focus:border-[#8b5cf6] leading-relaxed resize-none font-normal"
               placeholder="본인의 대외 활동 경력 기획 혹은 OOH 역량 정보 등을 포괄적으로 기재하세요."
             />
+          </div>
+        </div>
+
+        {/* EDUCATION & EXPERIENCE EDIT SECTION */}
+        <div className="bg-[#1a1b22] border border-[#272735] rounded-xl p-5 space-y-4">
+          <h5 className="text-white text-xs font-bold border-b border-zinc-800 pb-2.5 flex items-center gap-1.5">
+            <span className="w-1.5 h-3.5 bg-[#8b5cf6] rounded-sm" />
+            주요 학력 및 대외활동/인턴 경험 설정
+          </h5>
+
+          {/* Education */}
+          <div className="space-y-4 p-4 rounded-lg bg-[#121316]/40 border border-[#272735]/40">
+            <p className="text-[10px] text-amber-400 font-extrabold uppercase tracking-wide">Category: 학력 (Education)</p>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-3 pb-3">
+              <div className="md:col-span-3">
+                <label className="block text-[10px] text-zinc-500 mb-0.5">학교 / 기관</label>
+                <input type="text" value={eduYear} onChange={e=>setEduYear(e.target.value)} className="w-full bg-[#1a1b22] border border-[#272735] rounded p-1.5 text-xs text-white" />
+              </div>
+              <div className="md:col-span-3">
+                <label className="block text-[10px] text-zinc-500 mb-0.5">전공 및 기간</label>
+                <input type="text" value={eduTitle} onChange={e=>setEduTitle(e.target.value)} className="w-full bg-[#1a1b22] border border-[#272735] rounded p-1.5 text-xs text-white" />
+              </div>
+              <div className="md:col-span-6">
+                <label className="block text-[10px] text-zinc-500 mb-0.5">세부 설명</label>
+                <textarea rows={2} value={eduSubtitle} onChange={e=>setEduSubtitle(e.target.value)} className="w-full bg-[#1a1b22] border border-[#272735] rounded p-1.5 text-xs text-zinc-300 resize-none" />
+              </div>
+            </div>
+          </div>
+
+          {/* Intern 1 */}
+          <div className="space-y-4 p-4 rounded-lg bg-[#121316]/40 border border-[#272735]/40">
+            <p className="text-[10px] text-sky-400 font-extrabold uppercase tracking-wide">Category: 인턴 1 (Experience 1)</p>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-3 pb-3">
+              <div className="md:col-span-3">
+                <label className="block text-[10px] text-zinc-500 mb-0.5">소속 / 기관명</label>
+                <input type="text" value={internYear} onChange={e=>setInternYear(e.target.value)} className="w-full bg-[#1a1b22] border border-[#272735] rounded p-1.5 text-xs text-white" />
+              </div>
+              <div className="md:col-span-3">
+                <label className="block text-[10px] text-zinc-500 mb-0.5">역할 및 기간</label>
+                <input type="text" value={internTitle} onChange={e=>setInternTitle(e.target.value)} className="w-full bg-[#1a1b22] border border-[#272735] rounded p-1.5 text-xs text-white" />
+              </div>
+              <div className="md:col-span-6">
+                <label className="block text-[10px] text-zinc-500 mb-0.5">세부 설명</label>
+                <textarea rows={2} value={internSubtitle} onChange={e=>setInternSubtitle(e.target.value)} className="w-full bg-[#1a1b22] border border-[#272735] rounded p-1.5 text-xs text-zinc-300 resize-none" />
+              </div>
+            </div>
+          </div>
+
+          {/* Intern 2 */}
+          <div className="space-y-4 p-4 rounded-lg bg-[#121316]/40 border border-[#272735]/40">
+            <p className="text-[10px] text-sky-400 font-extrabold uppercase tracking-wide">Category: 인턴 2 (Experience 2)</p>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-3 pb-3">
+              <div className="md:col-span-3">
+                <label className="block text-[10px] text-zinc-500 mb-0.5">소속 / 기관명</label>
+                <input type="text" value={intern2Year} onChange={e=>setIntern2Year(e.target.value)} className="w-full bg-[#1a1b22] border border-[#272735] rounded p-1.5 text-xs text-white" />
+              </div>
+              <div className="md:col-span-3">
+                <label className="block text-[10px] text-zinc-500 mb-0.5">역할 및 기간</label>
+                <input type="text" value={intern2Title} onChange={e=>setIntern2Title(e.target.value)} className="w-full bg-[#1a1b22] border border-[#272735] rounded p-1.5 text-xs text-white" />
+              </div>
+              <div className="md:col-span-6">
+                <label className="block text-[10px] text-zinc-500 mb-0.5">세부 설명</label>
+                <textarea rows={2} value={intern2Subtitle} onChange={e=>setIntern2Subtitle(e.target.value)} className="w-full bg-[#1a1b22] border border-[#272735] rounded p-1.5 text-xs text-zinc-300 resize-none" />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -541,9 +652,18 @@ export default function AdminSiteSettings({
             초기 기본 프로필로 복원
           </button>
 
-          <div className="flex items-center gap-1.5 px-4 py-2 bg-[#8b5cf6]/10 text-[#a78bfa] font-extrabold text-xs rounded-lg">
-            <CheckCircle className="w-4 h-4 animate-pulse" />
-            변경 사항 자동 저장 중
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 px-3 py-2 bg-[#8b5cf6]/10 text-[#a78bfa] font-extrabold text-xs rounded-lg">
+              <CheckCircle className="w-3.5 h-3.5 animate-pulse" />
+              자동 저장됨
+            </div>
+            <button
+              type="submit"
+              className="flex items-center gap-1.5 px-4 py-2 bg-[#8b5cf6] hover:bg-[#7c3aed] text-white font-extrabold text-xs rounded-lg transition-colors cursor-pointer"
+            >
+              <Save className="w-3.5 h-3.5" />
+              수동 저장
+            </button>
           </div>
         </div>
       </form>

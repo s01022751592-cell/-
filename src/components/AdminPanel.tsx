@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Project, Inquiry } from "../types";
 import { motion, AnimatePresence } from "motion/react";
+import { db } from "../firebase";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import { 
   X, RefreshCw, Sparkles, LayoutDashboard, Layers, Inbox, 
   Settings, Code, LogOut 
@@ -39,22 +41,42 @@ export default function AdminPanel({
   // CRM inquiries database state
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
 
-  // Load inquiries from localStorage on hook init
+  // Load inquiries from Firestore on hook init
   useEffect(() => {
-    const rawInquiries = localStorage.getItem("inquiries");
-    if (rawInquiries) {
-      try {
-        setInquiries(JSON.parse(rawInquiries));
-      } catch (err) {
-        setInquiries([]);
+    let isMigrated = false;
+    const unsub = onSnapshot(doc(db, "appData", "inquiries"), (docSnap) => {
+      if (docSnap.exists() && docSnap.data().items) {
+        setInquiries(docSnap.data().items);
+      } else {
+        const rawInquiries = localStorage.getItem("inquiries");
+        if (rawInquiries) {
+          try {
+            const parsed = JSON.parse(rawInquiries);
+            setInquiries(parsed);
+            if (!isMigrated) {
+              isMigrated = true;
+              setDoc(doc(db, "appData", "inquiries"), { items: parsed }).catch(console.error);
+            }
+          } catch (err) {
+            setInquiries([]);
+          }
+        } else {
+          setInquiries([]);
+        }
       }
-    }
+    });
+    return () => unsub();
   }, []);
 
   // Synchronize dynamic inquiries
-  const saveInquiries = (updatedInq: Inquiry[]) => {
+  const saveInquiries = async (updatedInq: Inquiry[]) => {
     setInquiries(updatedInq);
-    localStorage.setItem("inquiries", JSON.stringify(updatedInq));
+    try {
+      const sanitized = JSON.parse(JSON.stringify(updatedInq));
+      await setDoc(doc(db, "appData", "inquiries"), { items: sanitized });
+    } catch (err) {
+      console.warn("Could not handle save inquiries", err);
+    }
   };
 
   // Delete an inquiry item

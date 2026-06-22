@@ -513,7 +513,35 @@ export default function AdminProjects({
     setFormVideoUrl(proj.videoUrl || "");
   };
 
-  // Close edit mode (Auto-saved)
+  // Manual Save (forces latest changes immediately)
+  const handleManualSave = () => {
+    if (!editingProjectId) return;
+    const currProject = projects.find(p => p.id === editingProjectId);
+    if (currProject) {
+      const newTags = formTags.split(",").map((t) => t.trim()).filter((t) => t.length > 0);
+      const updated = projects.map((p) => {
+        if (p.id === editingProjectId) {
+          return {
+            ...p,
+            title: formTitle,
+            description: formDescription,
+            period: formPeriod,
+            tags: newTags,
+            details: formDetails,
+            imageUrl: formImage,
+            extraImages: formExtraImages,
+            videoUrl: formVideoUrl.trim() || undefined,
+          };
+        }
+        return p;
+      });
+      onUpdateProjects(updated);
+    }
+    setEditingProjectId(null);
+    resetForm();
+  };
+
+  // Close edit mode (Cancel/Auto-saved)
   const handleCloseEdit = () => {
     setEditingProjectId(null);
     resetForm();
@@ -1061,8 +1089,16 @@ export default function AdminProjects({
 
                     <div className="flex justify-end gap-2 pt-3 border-t border-[#272735]">
                       <div className="text-emerald-400 text-xs font-bold flex items-center pr-2 gap-1.5 animate-pulse">
-                        <CheckCircle className="w-3.5 h-3.5" /> 자동 저장 중
+                        <CheckCircle className="w-3.5 h-3.5" /> 자동 저장됨
                       </div>
+                      <button
+                        type="button"
+                        onClick={handleManualSave}
+                        className="px-4 py-2 bg-[#8b5cf6] text-white hover:bg-[#7c3aed] rounded text-xs font-extrabold transition-colors cursor-pointer flex items-center gap-1.5"
+                      >
+                        <Save className="w-3.5 h-3.5" />
+                        수동 저장 및 닫기
+                      </button>
                       <button
                         type="button"
                         onClick={handleCloseEdit}
@@ -1092,11 +1128,6 @@ export default function AdminProjects({
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
                           <h4 className="text-white text-xs sm:text-sm font-bold truncate tracking-tight">{proj.title}</h4>
-                          {proj.isDefault && (
-                            <span className="text-[9px] bg-indigo-950/40 text-[#a78bfa] border border-[#8b5cf6]/30 px-1.5 py-0.2 rounded font-extrabold uppercase">
-                              기본제공
-                            </span>
-                          )}
                         </div>
                         <div className="flex flex-wrap items-center gap-1.5 mt-1">
                           <span className="text-[10px] text-zinc-500 font-medium">{proj.period || "기간 표시전"}</span>

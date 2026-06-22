@@ -12,6 +12,8 @@ import AdminPanel from "./components/AdminPanel";
 import { ProfileConfig } from "./components/admin/AdminSiteSettings";
 import { Lock, Unlock, ShieldAlert, CheckCircle, Smartphone, Mail, Settings, ArrowUp, X, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { db } from "./firebase";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
 
 export default function App() {
   // Global projects state
@@ -75,59 +77,57 @@ export default function App() {
 
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // Initialize and load projects & profile from LocalStorage
+  // Initialize and load projects & profile from Firestore
   useEffect(() => {
-    const storedProjects = localStorage.getItem("shin_yoonseop_projects");
-    if (storedProjects) {
-      try {
-        const parsed = JSON.parse(storedProjects) as Project[];
-        // Map over loaded projects and update default ones to match their current code definitions.
-        // This ensures old randomized or stale image URLs in local storage are overwritten with the static ones.
-        const merged = parsed.map((proj) => {
-          const match = DEFAULT_PROJECTS.find((d) => d.id === proj.id);
-          if (match && (proj.isDefault || match.isDefault)) {
-            return { ...match };
+    let isProjectMigrated = false;
+    let isProfileMigrated = false;
+
+    // Listen to projects
+    const unsubProjects = onSnapshot(doc(db, "appData", "projects"), (docSnap) => {
+      if (docSnap.exists() && docSnap.data().items) {
+        setProjects(docSnap.data().items);
+      } else {
+        // Fallback to local storage migration once
+        const storedProjects = localStorage.getItem("shin_yoonseop_projects_v3");
+        if (storedProjects) {
+          try {
+            const parsed = JSON.parse(storedProjects) as Project[];
+            if (parsed.length > 0) {
+              setProjects(parsed);
+              if (!isProjectMigrated) {
+                isProjectMigrated = true;
+                setDoc(doc(db, "appData", "projects"), { items: parsed }).catch(console.error);
+              }
+            } else {
+              setProjects(DEFAULT_PROJECTS);
+            }
+          } catch(e) {
+            setProjects(DEFAULT_PROJECTS);
           }
-          return proj;
-        });
-
-        // Add any missing default projects
-        const parsedIds = parsed.map((p) => p.id);
-        const missingDefaults = DEFAULT_PROJECTS.filter((d) => !parsedIds.includes(d.id));
-        const finalProjects = [...merged, ...missingDefaults];
-
-        setProjects(finalProjects);
-        try {
-          localStorage.setItem("shin_yoonseop_projects", JSON.stringify(finalProjects));
-        } catch (innerErr) {
-          console.warn("Could not sync projects to localStorage", innerErr);
-        }
-      } catch (err) {
-        setProjects(DEFAULT_PROJECTS);
-      }
-    } else {
-      setProjects(DEFAULT_PROJECTS);
-      try {
-        localStorage.setItem("shin_yoonseop_projects", JSON.stringify(DEFAULT_PROJECTS));
-      } catch (err) {
-        console.warn("Could not set initial projects to localStorage", err);
-      }
-    }
-
-    const storedProfile = localStorage.getItem("shin_yoonseop_profile");
-    if (storedProfile) {
-      try {
-        const parsed = JSON.parse(storedProfile);
-        if (!parsed.summary?.includes("콘텐츠마케터 역량과")) {
-          setProfile(profile); // use the current state profile we just initialized globally which is updated
-          localStorage.setItem("shin_yoonseop_profile", JSON.stringify(profile));
         } else {
-          setProfile(parsed);
+          setProjects(DEFAULT_PROJECTS);
         }
-      } catch (err) {
-        // use default
       }
-    }
+    });
+
+    // Listen to profile
+    const unsubProfile = onSnapshot(doc(db, "appData", "profile"), (docSnap) => {
+      if (docSnap.exists() && docSnap.data().config) {
+        setProfile(docSnap.data().config);
+      } else {
+        const storedProfile = localStorage.getItem("shin_yoonseop_profile");
+        if (storedProfile) {
+          try {
+             const parsed = JSON.parse(storedProfile);
+             setProfile(parsed);
+             if (!isProfileMigrated) {
+               isProfileMigrated = true;
+               setDoc(doc(db, "appData", "profile"), { config: parsed }).catch(console.error);
+             }
+          } catch(e) {}
+        }
+      }
+    });
 
     // Check if admin is currently active in session
     const storedAdmin = localStorage.getItem("shin_yoonseop_is_admin");
@@ -144,7 +144,11 @@ export default function App() {
       }
     };
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      unsubProjects();
+      unsubProfile();
+    };
   }, []);
 
   // Scroll Spy to highlight navigation menu items on scroll
@@ -205,43 +209,42 @@ export default function App() {
   }, [navigationMode, projects]);
 
   // Update projects list
-  const handleUpdateProjects = (updatedProjects: Project[]) => {
+  const handleUpdateProjects = async (updatedProjects: Project[]) => {
     setProjects(updatedProjects);
     try {
-      localStorage.setItem("shin_yoonseop_projects", JSON.stringify(updatedProjects));
+      const sanitized = JSON.parse(JSON.stringify(updatedProjects));
+      await setDoc(doc(db, "appData", "projects"), { items: sanitized });
     } catch (e: any) {
       console.error("Storage error:", e);
-      if (e.name === "QuotaExceededError") {
-        alert("저장 공간이 부족합니다. 이미지 용량을 줄이거나 불필요한 기존 항목을 삭제해주세요.");
-      }
+      alert("데이터를 클라우드에 저장하는 중 오류가 발생했습니다.");
     }
   };
 
   // Reset to default original portfolios
-  const handleResetProjects = () => {
+  const handleResetProjects = async () => {
     setProjects(DEFAULT_PROJECTS);
     try {
-      localStorage.setItem("shin_yoonseop_projects", JSON.stringify(DEFAULT_PROJECTS));
+      const sanitized = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+      await setDoc(doc(db, "appData", "projects"), { items: sanitized });
     } catch (err) {
       console.warn("Could not handle reset projects", err);
     }
   };
 
   // Update profile config
-  const handleUpdateProfile = (updatedProfile: ProfileConfig) => {
+  const handleUpdateProfile = async (updatedProfile: ProfileConfig) => {
     setProfile(updatedProfile);
     try {
-      localStorage.setItem("shin_yoonseop_profile", JSON.stringify(updatedProfile));
+      const sanitized = JSON.parse(JSON.stringify(updatedProfile));
+      await setDoc(doc(db, "appData", "profile"), { config: sanitized });
     } catch (e: any) {
       console.error("Storage error:", e);
-      if (e.name === "QuotaExceededError") {
-        alert("저장 공간이 부족합니다.");
-      }
+      alert("데이터를 클라우드에 저장하는 중 오류가 발생했습니다.");
     }
   };
 
   // Reset profile back to original default
-  const handleResetProfile = () => {
+  const handleResetProfile = async () => {
     const defaultProfile: ProfileConfig = {
       name: "신윤섭",
       email: "s01022751592@gmail.com",
@@ -287,7 +290,7 @@ export default function App() {
     };
     setProfile(defaultProfile);
     try {
-      localStorage.setItem("shin_yoonseop_profile", JSON.stringify(defaultProfile));
+      await setDoc(doc(db, "appData", "profile"), { config: defaultProfile });
     } catch (err) {
       console.warn("Could not handle reset profile", err);
     }

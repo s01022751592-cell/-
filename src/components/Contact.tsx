@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "motion/react";
 import { Send, Phone, Mail, CheckCircle2, AlertCircle, Award, Compass, MessageCircle } from "lucide-react";
 import { Inquiry } from "../types";
 import { ProfileConfig } from "./admin/AdminSiteSettings";
+import { db } from "../firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 interface ContactProps {
   isStandalone?: boolean;
@@ -53,11 +55,15 @@ export default function Contact({ isStandalone = false, onBackToHome, profile }:
 
     setIsSubmitting(true);
 
-    // Simulate short network delay, then save locally to act as Admin Inquiry Inbox
-    setTimeout(() => {
+    // Submit to Firestore
+    const submitData = async () => {
       try {
-        const rawInquiries = localStorage.getItem("inquiries");
-        const inquiriesList: Inquiry[] = rawInquiries ? JSON.parse(rawInquiries) : [];
+        const ref = doc(db, "appData", "inquiries");
+        const docSnap = await getDoc(ref);
+        let inquiriesList: Inquiry[] = [];
+        if (docSnap.exists() && docSnap.data().items) {
+          inquiriesList = docSnap.data().items;
+        }
         
         const newInquiry: Inquiry = {
           id: `inq-${Date.now()}`,
@@ -69,17 +75,21 @@ export default function Contact({ isStandalone = false, onBackToHome, profile }:
         };
 
         inquiriesList.unshift(newInquiry);
-        localStorage.setItem("inquiries", JSON.stringify(inquiriesList));
+        const sanitized = JSON.parse(JSON.stringify(inquiriesList));
+        await setDoc(ref, { items: sanitized });
 
         // Reset form
         setFormData({ name: "", email: "", phone: "", content: "" });
         setSuccess(true);
       } catch (err) {
-        setError("스토리지를 처리하는 중 일시적 오류가 발생했습니다.");
+        console.error(err);
+        setError("서버로 전송하는 중 오류가 발생했습니다.");
       } finally {
         setIsSubmitting(false);
       }
-    }, 1200);
+    };
+
+    submitData();
   };
 
   return (
