@@ -756,42 +756,66 @@ export default function AdminProjects({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[11px] font-bold text-zinc-400 mb-1">
-                대표 썸네일 이미지 업로드 (최대 5MB)
+              <label className="block text-[11px] font-bold text-zinc-400 mb-2">
+                대표 썸네일 이미지 업로드
               </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleImageFileChange(e, true)}
-                className="w-full bg-[#121316] border border-[#272735] rounded p-1 text-[11px] text-zinc-500 focus:outline-none"
-              />
+              <label className="group flex flex-col items-center justify-center border-2 border-dashed border-[#272735] hover:border-[#8b5cf6]/60 bg-[#121316] rounded-xl p-5 cursor-pointer transition-all hover:bg-[#1a1b22]/50 text-center relative overflow-hidden h-[120px]">
+                {formImage ? (
+                  <div className="absolute inset-0 w-full h-full">
+                    <img src={formImage} alt="Thumbnail preview" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ImageIcon className="w-5 h-5 text-zinc-300 mb-1" />
+                      <span className="text-[10px] text-white font-bold">내 컴퓨터에서 이미지 변경하기</span>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <ImageIcon className="w-6 h-6 text-zinc-500 group-hover:text-[#a78bfa] mb-1.5 transition-colors" />
+                    <span className="text-[11px] font-bold text-zinc-300 group-hover:text-white">내 컴퓨터에서 대표 이미지 올리기</span>
+                    <span className="text-[9px] text-zinc-500 mt-0.5">클릭하여 파일 탐색기 열기 (최대 5MB)</span>
+                  </>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageFileChange(e, true)}
+                  className="hidden"
+                />
+              </label>
               {formImage && (
-                <div className="mt-1 text-[10px] text-emerald-400 flex items-center gap-1">
+                <div className="mt-1.5 text-[10px] text-emerald-400 flex items-center gap-1 font-semibold">
                   <CheckCircle className="w-3.5 h-3.5" />
-                  대표 미디어 Base64 빌드 완료
+                  대표 썸네일 이미지 등록 완료 (내 컴퓨터 업로드 방식)
                 </div>
               )}
             </div>
+
             <div>
-              <label className="block text-[11px] font-bold text-zinc-400 mb-1">
-                기획 보고 첨부자료 업로드 (멀티 선택 가능)
+              <label className="block text-[11px] font-bold text-zinc-400 mb-2">
+                기획 보고 첨부자료 업로드 (여러 장 등록 가능)
               </label>
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={(e) => handleImageFileChange(e, false)}
-                className="w-full bg-[#121316] border border-[#272735] rounded p-1 text-[11px] text-zinc-500 focus:outline-none"
-              />
+              <label className="group flex flex-col items-center justify-center border-2 border-dashed border-[#272735] hover:border-[#8b5cf6]/60 bg-[#121316] rounded-xl p-5 cursor-pointer transition-all hover:bg-[#1a1b22]/50 text-center h-[120px]">
+                <Plus className="w-6 h-6 text-zinc-500 group-hover:text-[#a78bfa] mb-1.5 transition-colors" />
+                <span className="text-[11px] font-bold text-zinc-300 group-hover:text-white">내 컴퓨터에서 추가 이미지 여러 장 한 번에 등록하기</span>
+                <span className="text-[9px] text-zinc-500 mt-0.5">여러 파일 드래그 앤 드롭 또는 멀티 선택 지원</span>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={(e) => handleImageFileChange(e, false)}
+                  className="hidden"
+                />
+              </label>
+              
               {formExtraImages.length > 0 && (
-                <div className="mt-1">
-                  <div className="text-[10px] text-[#a78bfa] flex items-center gap-1 font-semibold animate-pulse mb-2">
+                <div className="mt-2">
+                  <div className="text-[10px] text-[#a78bfa] flex items-center gap-1 font-semibold mb-2">
                     <CheckCircle className="w-3.5 h-3.5" />
-                    {formExtraImages.length}개의 관련 시각자료가 추가 등록됨
+                    전체 {formExtraImages.length}개의 하이엔드 시각자료가 추가 등록됨 (순서 조정 가능)
                   </div>
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                     {formExtraImages.map((img, idx) => (
-                      <div key={idx} className="relative group rounded overflow-hidden border border-[#272735] aspect-video">
+                      <div key={idx} className="relative group rounded overflow-hidden border border-[#272735] aspect-video bg-zinc-950">
                         <img src={img} alt={`Extra ${idx}`} className="w-full h-full object-cover" />
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-1">
                           <button type="button" onClick={() => handleMoveExtraImage(idx, -1)} disabled={idx === 0} className="text-white hover:text-[#a78bfa] disabled:opacity-30 cursor-pointer p-1">
@@ -941,41 +965,62 @@ export default function AdminProjects({
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-[10px] text-zinc-500 font-bold mb-1">
-                          썸네일 이미지 파일 교체
+                        <label className="block text-[10px] text-zinc-500 font-bold mb-2">
+                          대표 썸네일 이미지 파일 교체 (내 컴퓨터에서 업로드)
                         </label>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleImageFileChange(e, true)}
-                          className="w-full bg-[#121316] border border-[#272735] rounded p-1 text-[11px] text-zinc-500 focus:outline-none"
-                        />
+                        <label className="group flex flex-col items-center justify-center border-2 border-dashed border-[#272735] hover:border-[#8b5cf6]/60 bg-[#121316] rounded-xl p-4 cursor-pointer transition-all hover:bg-[#1a1b22]/50 text-center relative overflow-hidden h-[110px]">
+                          {formImage ? (
+                            <div className="absolute inset-0 w-full h-full">
+                              <img src={formImage} alt="Thumbnail preview" className="w-full h-full object-cover" />
+                              <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <ImageIcon className="w-4 h-4 text-zinc-300 mb-1" />
+                                <span className="text-[9px] text-white font-bold">내 컴퓨터에서 이미지 변경</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <>
+                              <ImageIcon className="w-5 h-5 text-zinc-500 mb-1" />
+                              <span className="text-[10px] font-bold text-zinc-300 group-hover:text-white">내 컴퓨터 파일에서 메인 표지 로드</span>
+                            </>
+                          )}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleImageFileChange(e, true)}
+                            className="hidden"
+                          />
+                        </label>
                       </div>
                       <div>
-                        <label className="block text-[10px] text-zinc-500 font-bold mb-1">
-                          서브 카테고리 미디어 교체
+                        <label className="block text-[10px] text-zinc-500 font-bold mb-2">
+                          추가 하이엔드 기획 이미지 추가 (내 컴퓨터에서 여러장 가능)
                         </label>
-                        <input
-                          type="file"
-                          multiple
-                          accept="image/*"
-                          onChange={(e) => handleImageFileChange(e, false)}
-                          className="w-full bg-[#121316] border border-[#272735] rounded p-1 text-[11px] text-zinc-500 focus:outline-none"
-                        />
+                        <label className="group flex flex-col items-center justify-center border-2 border-dashed border-[#272735] hover:border-[#8b5cf6]/60 bg-[#121316] rounded-xl p-4 cursor-pointer transition-all hover:bg-[#1a1b22]/50 text-center h-[110px]">
+                          <Plus className="w-5 h-5 text-zinc-500 mb-1" />
+                          <span className="text-[10px] font-bold text-zinc-300 group-hover:text-white">추가 자료 파일들 한 번에 올리기</span>
+                          <span className="text-[8px] text-zinc-500">클릭 또는 파일들 드래그</span>
+                          <input
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            onChange={(e) => handleImageFileChange(e, false)}
+                            className="hidden"
+                          />
+                        </label>
                         {formExtraImages.length > 0 && (
-                          <div className="mt-2 grid grid-cols-3 sm:grid-cols-4 gap-2">
+                          <div className="mt-2 grid grid-cols-3 sm:grid-cols-4 gap-1.5">
                             {formExtraImages.map((img, idx) => (
-                              <div key={idx} className="relative group rounded overflow-hidden border border-[#272735] aspect-video">
+                              <div key={idx} className="relative group rounded overflow-hidden border border-[#272735] aspect-video bg-zinc-950">
                                 <img src={img} alt={`Extra ${idx}`} className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-1">
-                                  <button type="button" onClick={() => handleMoveExtraImage(idx, -1)} disabled={idx === 0} className="text-white hover:text-[#a78bfa] disabled:opacity-30 cursor-pointer p-1">
-                                    <ChevronLeft className="w-4 h-4" />
+                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-0.5">
+                                  <button type="button" onClick={() => handleMoveExtraImage(idx, -1)} disabled={idx === 0} className="text-white hover:text-[#a78bfa] disabled:opacity-30 cursor-pointer p-0.5">
+                                    <ChevronLeft className="w-3.5 h-3.5" />
                                   </button>
-                                  <button type="button" onClick={() => handleDeleteExtraImage(idx)} className="text-red-400 hover:text-red-300 mx-1 cursor-pointer p-1 bg-red-900/30 rounded-full">
-                                    <XIcon className="w-3.5 h-3.5" />
+                                  <button type="button" onClick={() => handleDeleteExtraImage(idx)} className="text-red-400 hover:text-red-300 mx-0.5 cursor-pointer p-0.5 bg-red-900/30 rounded-full">
+                                    <XIcon className="w-3 h-3" />
                                   </button>
-                                  <button type="button" onClick={() => handleMoveExtraImage(idx, 1)} disabled={idx === formExtraImages.length - 1} className="text-white hover:text-[#a78bfa] disabled:opacity-30 cursor-pointer p-1">
-                                    <ChevronRight className="w-4 h-4" />
+                                  <button type="button" onClick={() => handleMoveExtraImage(idx, 1)} disabled={idx === formExtraImages.length - 1} className="text-white hover:text-[#a78bfa] disabled:opacity-30 cursor-pointer p-0.5">
+                                    <ChevronRight className="w-3.5 h-3.5" />
                                   </button>
                                 </div>
                               </div>

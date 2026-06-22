@@ -22,40 +22,44 @@ export default function App() {
     name: "신윤섭",
     email: "s01022751592@gmail.com",
     phone: "010-2275-1592",
-    summary: "과학기술정보통신부 후원 (사)한국인터넷소통협회 주관 대한민국소통어워즈 인턴 활동과 다양한 OOH/SNS 기획 경력을 보유한 실무형 크리에이티브 파트너입니다.",
-    heroHeadline: "체계적인 지표 분석부터 실무형 기획, 시각적 커뮤니케이션까지 확실한 결과물을 만듭니다.",
+    summary: "콘텐츠마케터 역량과 영상제작, 콘텐츠기획, SEO, SNS마케팅 능력을 가진 기획자 신윤섭입니다.",
+    heroHeadline: "상호작용 데이터를 기반으로 정교한 모니터링 분석 및 트렌디한 디지털 커뮤니케이션을 기획합니다.",
     
-    eduYear: "청주대학교 광고홍보학과",
-    eduTitle: "광고홍보학과 전공",
-    eduSubtitle: "체계적인 광고 기획 가설 수립 및 홍보 전략, 설득 구조의 기초를 다진 탄탄한 학술적 배경.",
+    eduYear: "2022. 01 ~ 2028. 01 (졸업예정)",
+    eduTitle: "청주대학교 광고홍보학과",
+    eduSubtitle: "대학교(4년) 졸업예정",
     
-    internYear: "제18회 대한민국소통어워즈",
-    internTitle: "디지털소통 효과분석 모니터링 인턴 수료",
-    internSubtitle: "사단법인 한국인터넷소통협회 주최, 과학기술정보통신부 후원. 디지털 채널 콘텐츠 활성도 측정 및 브랜드 디지털 소통 지표 모니터링 분석 실무를 수행.",
+    internYear: "2025. 12 ~ 2026. 02 (3개월)",
+    internTitle: "김수현드라마아트홀 인턴",
+    internSubtitle: "공식 SNS 채널 관리, 카드뉴스 기획/제작(미리캔버스), 트렌드 정보 제공 및 아카이브실 소장품 홍보.",
     
-    skillDesign1_name: "Figma",
+    intern2Year: "2025. 09 ~ 2025. 12 (4개월)",
+    intern2Title: "한국인터넷소통협회 인턴",
+    intern2Subtitle: "제18회 대한민국소통어워즈 디지털소통 효과분석 모니터링. 관광 기업 3곳의 상호작용 데이터 진단 및 정량/정성 데이터 분석.",
+    
+    skillDesign1_name: "Photoshop",
     skillDesign1_level: 90,
-    skillDesign1_desc: "Figma 기반 화면 설계, 유저 플로우 도출 및 정보 구조화 설계",
-    skillDesign2_name: "미리캔버스",
+    skillDesign1_desc: "시각 디자인 보정, 썸네일 합성 및 키비주얼 그래픽 리터칭",
+    skillDesign2_name: "창의성",
     skillDesign2_level: 95,
-    skillDesign2_desc: "SNS 배너, 상세페이지 템플릿의 고속 기획 및 레이아웃 배치",
-    skillDesign3_name: "Photoshop",
-    skillDesign3_level: 80,
-    skillDesign3_desc: "시각 디자인 보정, 썸네일 합성 및 키비주얼 그래픽 리터칭",
+    skillDesign2_desc: "독창적인 아이디어 기획 및 차별화된 콘텐츠 제작 역량",
+    skillDesign3_name: "의사소통",
+    skillDesign3_level: 95,
+    skillDesign3_desc: "객관적인 데이터 기반 설득 및 원활한 팀 커뮤니케이션",
     
-    skillMarketing1_name: "Google Analytics (GA4)",
+    skillMarketing1_name: "영상제작",
     skillMarketing1_level: 85,
-    skillMarketing1_desc: "디지털 채널 정량 수치 모니터링 및 퍼널 전환 로그 분석",
-    skillMarketing2_name: "Excel",
+    skillMarketing1_desc: "디지털 채널 숏폼 및 주요 미디어 영상 기획 및 컷편집",
+    skillMarketing2_name: "콘텐츠기획",
     skillMarketing2_level: 90,
-    skillMarketing2_desc: "피벗 테이블 설계, 다차원 통계 자료 가공 및 대시보드 구조화",
+    skillMarketing2_desc: "타겟 오디언스 분석을 통한 직관적이고 세련된 정보성 콘텐츠 제작",
     
-    skillPlanning1_name: "PPT 기획",
-    skillPlanning1_level: 95,
-    skillPlanning1_desc: "프레젠테이션 스토리라인 설계, 논리적 제안서 및 기획 문서 작성",
-    skillPlanning2_name: "ChatGPT Prompting",
-    skillPlanning2_level: 90,
-    skillPlanning2_desc: "맞춤형 페르소나 설정 및 시장 트렌드 마이닝 최적화 프롬프트 설계"
+    skillPlanning1_name: "SEO",
+    skillPlanning1_level: 85,
+    skillPlanning1_desc: "검색 엔진 최적화를 통한 유입 증대 및 키워드 마이닝",
+    skillPlanning2_name: "SNS마케팅",
+    skillPlanning2_level: 95,
+    skillPlanning2_desc: "트렌디한 월간 큐레이션 시리즈 및 브랜드 채널 운영 관리"
   });
 
   // Navigation page views state
@@ -76,7 +80,28 @@ export default function App() {
     const storedProjects = localStorage.getItem("shin_yoonseop_projects");
     if (storedProjects) {
       try {
-        setProjects(JSON.parse(storedProjects));
+        const parsed = JSON.parse(storedProjects) as Project[];
+        // Map over loaded projects and update default ones to match their current code definitions.
+        // This ensures old randomized or stale image URLs in local storage are overwritten with the static ones.
+        const merged = parsed.map((proj) => {
+          const match = DEFAULT_PROJECTS.find((d) => d.id === proj.id);
+          if (match && (proj.isDefault || match.isDefault)) {
+            return { ...match };
+          }
+          return proj;
+        });
+
+        // Add any missing default projects
+        const parsedIds = parsed.map((p) => p.id);
+        const missingDefaults = DEFAULT_PROJECTS.filter((d) => !parsedIds.includes(d.id));
+        const finalProjects = [...merged, ...missingDefaults];
+
+        setProjects(finalProjects);
+        try {
+          localStorage.setItem("shin_yoonseop_projects", JSON.stringify(finalProjects));
+        } catch (innerErr) {
+          console.warn("Could not sync projects to localStorage", innerErr);
+        }
       } catch (err) {
         setProjects(DEFAULT_PROJECTS);
       }
@@ -92,7 +117,13 @@ export default function App() {
     const storedProfile = localStorage.getItem("shin_yoonseop_profile");
     if (storedProfile) {
       try {
-        setProfile(JSON.parse(storedProfile));
+        const parsed = JSON.parse(storedProfile);
+        if (!parsed.summary?.includes("콘텐츠마케터 역량과")) {
+          setProfile(profile); // use the current state profile we just initialized globally which is updated
+          localStorage.setItem("shin_yoonseop_profile", JSON.stringify(profile));
+        } else {
+          setProfile(parsed);
+        }
       } catch (err) {
         // use default
       }
@@ -215,40 +246,44 @@ export default function App() {
       name: "신윤섭",
       email: "s01022751592@gmail.com",
       phone: "010-2275-1592",
-      summary: "과학기술정보통신부 후원 (사)한국인터넷소통협회 주관 대한민국소통어워즈 인턴 활동과 다양한 OOH/SNS 기획 경력을 보유한 실무형 크리에이티브 파트너입니다.",
-      heroHeadline: "체계적인 지표 분석부터 실무형 기획, 시각적 커뮤니케이션까지 확실한 결과물을 만듭니다.",
+      summary: "콘텐츠마케터 역량과 영상제작, 콘텐츠기획, SEO, SNS마케팅 능력을 가진 기획자 신윤섭입니다.",
+      heroHeadline: "상호작용 데이터를 기반으로 정교한 모니터링 분석 및 트렌디한 디지털 커뮤니케이션을 기획합니다.",
       
-      eduYear: "청주대학교 광고홍보학과",
-      eduTitle: "광고홍보학과 전공",
-      eduSubtitle: "체계적인 광고 기획 가설 수립 및 홍보 전략, 설득 구조의 기초를 다진 탄탄한 학술적 배경.",
+      eduYear: "2022. 01 ~ 2028. 01 (졸업예정)",
+      eduTitle: "청주대학교 광고홍보학과",
+      eduSubtitle: "대학교(4년) 졸업예정",
       
-      internYear: "제18회 대한민국소통어워즈",
-      internTitle: "디지털소통 효과분석 모니터링 인턴 수료",
-      internSubtitle: "사단법인 한국인터넷소통협회 주최, 과학기술정보통신부 후원. 디지털 채널 콘텐츠 활성도 측정 및 브랜드 디지털 소통 지표 모니터링 분석 실무를 수행.",
+      internYear: "2025. 12 ~ 2026. 02 (3개월)",
+      internTitle: "김수현드라마아트홀 인턴",
+      internSubtitle: "공식 SNS 채널 관리, 카드뉴스 기획/제작(미리캔버스), 트렌드 정보 제공 및 아카이브실 소장품 홍보.",
       
-      skillDesign1_name: "Figma",
+      intern2Year: "2025. 09 ~ 2025. 12 (4개월)",
+      intern2Title: "한국인터넷소통협회 인턴",
+      intern2Subtitle: "제18회 대한민국소통어워즈 디지털소통 효과분석 모니터링. 관광 기업 3곳의 상호작용 데이터 진단 및 정량/정성 데이터 분석.",
+      
+      skillDesign1_name: "Photoshop",
       skillDesign1_level: 90,
-      skillDesign1_desc: "Figma 기반 화면 설계, 유저 플로우 도출 및 정보 구조화 설계",
-      skillDesign2_name: "미리캔버스",
+      skillDesign1_desc: "시각 디자인 보정, 썸네일 합성 및 키비주얼 그래픽 리터칭",
+      skillDesign2_name: "창의성",
       skillDesign2_level: 95,
-      skillDesign2_desc: "SNS 배너, 상세페이지 템플릿의 고속 기획 및 레이아웃 배치",
-      skillDesign3_name: "Photoshop",
-      skillDesign3_level: 80,
-      skillDesign3_desc: "시각 디자인 보정, 썸네일 합성 및 키비주얼 그래픽 리터칭",
+      skillDesign2_desc: "독창적인 아이디어 기획 및 차별화된 콘텐츠 제작 역량",
+      skillDesign3_name: "의사소통",
+      skillDesign3_level: 95,
+      skillDesign3_desc: "객관적인 데이터 기반 설득 및 원활한 팀 커뮤니케이션",
       
-      skillMarketing1_name: "Google Analytics (GA4)",
+      skillMarketing1_name: "영상제작",
       skillMarketing1_level: 85,
-      skillMarketing1_desc: "디지털 채널 정량 수치 모니터링 및 퍼널 전환 로그 분석",
-      skillMarketing2_name: "Excel",
+      skillMarketing1_desc: "디지털 채널 숏폼 및 주요 미디어 영상 기획 및 컷편집",
+      skillMarketing2_name: "콘텐츠기획",
       skillMarketing2_level: 90,
-      skillMarketing2_desc: "피벗 테이블 설계, 다차원 통계 자료 가공 및 대시보드 구조화",
+      skillMarketing2_desc: "타겟 오디언스 분석을 통한 직관적이고 세련된 정보성 콘텐츠 제작",
       
-      skillPlanning1_name: "PPT 기획",
-      skillPlanning1_level: 95,
-      skillPlanning1_desc: "프레젠테이션 스토리라인 설계, 논리적 제안서 및 기획 문서 작성",
-      skillPlanning2_name: "ChatGPT Prompting",
-      skillPlanning2_level: 90,
-      skillPlanning2_desc: "맞춤형 페르소나 설정 및 시장 트렌드 마이닝 최적화 프롬프트 설계"
+      skillPlanning1_name: "SEO",
+      skillPlanning1_level: 85,
+      skillPlanning1_desc: "검색 엔진 최적화를 통한 유입 증대 및 키워드 마이닝",
+      skillPlanning2_name: "SNS마케팅",
+      skillPlanning2_level: 95,
+      skillPlanning2_desc: "트렌디한 월간 큐레이션 시리즈 및 브랜드 채널 운영 관리"
     };
     setProfile(defaultProfile);
     try {

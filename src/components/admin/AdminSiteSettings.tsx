@@ -10,9 +10,6 @@ export interface ProfileConfig {
   summary: string;
   heroHeadline: string;
   
-  // Custom resume file text representation
-  resumeText?: string;
-  
   // Education
   eduYear?: string;
   eduTitle?: string;
@@ -56,69 +53,6 @@ export interface ProfileConfig {
   skillPlanning2_desc?: string;
 }
 
-export const DEFAULT_RESUME_TEXT = `=========================================
-인턴 및 대외활동 포트폴리오 이력서 (신윤섭)
-=========================================
-■ 기본 정보 (Personal Profile)
-  - 성명: 신윤섭 (남, 만 23세)
-  - 연락처: 010-2275-1592
-  - 이메일: s01022751592@gmail.com
-  - 희망근무지: 충북 청주시 상당구, 청원구, 서원구
-  - 지원분야: 콘텐츠마케터 / 영상제작, 콘텐츠기획, SEO, SNS마케팅
-  - 희망연봉: 면접 후 결정
-  - 상세 포트폴리오 웹사이트: {URL}
-
-■ 소개글 (Introduce)
-  "김수현드라마아트홀 공식 SNS 채널 콘텐츠 활성화 관리 및 한국인터넷소통협회 주최 대한민국소통어워즈 인턴 활동과 브랜드 디지털 소통 지표 모니터링 분석 실력을 탄탄히 갖춘 기획자 신윤섭입니다."
-
------------------------------------------
-1. 학력 사항 (Education)
------------------------------------------
-- 2022. 01 ~ 2028. 01 (졸업예정)
-  청주대학교 광고홍보학과 전공
-  * 체계적인 광고 기획 가설 수립 및 홍보 전략, 설득 구조의 기초를 다진 탄탄한 학술적 배경.
-
------------------------------------------
-2. 인턴 및 대외 실무 경력 (Experience)
------------------------------------------
-[경력 1] 김수현드라마아트홀 인턴
-- 기간: 2025. 12 ~ 2026. 02 (3개월)
-- 세부 수행 업무 및 실무 경험:
-  * 김수현드라마아트홀의 공식 SNS 채널을 통해 방문객과 일반 대중에게 유용한 드라마 트렌드 정보를 제공하고, 아카이브실이 보유한 특별한 소장 자료들을 매력적으로 홍보해야 하는 미션을 성공적으로 수행했습니다.
-  * 디자인 툴(미리캔버스)을 주도적으로 활용하여 대중의 시선을 단번에 사로잡을 수 있는 직관적이고 세련된 정보성 카드뉴스를 기획 및 제작했습니다.
-  * 'TV 방영 드라마'와 같은 월간 큐레이션 소통 홍보 콘텐츠 시리즈를 기획하여 트렌디한 볼거리를 지속 제공하였습니다.
-  * 아카이브실 소장품인 '내 남편과 결혼해줘' 실제 드라마 대본 소개 시리즈를 시각화 레이아웃으로 다채롭게 풀어냈으며, 옛드라마 주요 아카이브를 정돈 가열하고 전반적인 채널 활성도를 책임감 있게 기획 관리했습니다.
-
-[경력 2] 한국인터넷소통협회 디지털소통 효과분석 인턴
-- 기간: 2025. 09 ~ 2025. 12 (4개월)
-- 세부 수행 업무 및 실무 경험:
-  * 과학기술정보통신부가 후원하고 (사)한국인터넷소통협회가 주관한 '제18회 대한민국소통어워즈'의 디지털소통 효과분석 모니터링 프로그램에 인턴으로 참여했습니다.
-  * 3개월간 지정받은 관광 공공/대형 기업 3곳의 실제 소통 활성화 지표와 운영 현황 진단 과제를 할당받아 완벽히 마쳤습니다.
-  * 단순히 표면상의 채널 모습만을 모니터링하는 차원을 넘어, 개별 콘텐츠가 타겟 사용자와 실제 어떤 전환 퍼널로 상호작용하는지 정량적 데이터 기반으로 정밀 진단했습니다.
-  * 동종 유사 업계 브랜드 간의 확연한 수치 차이점과 각각의 디지털 커뮤니케이션 고유 특징을 일목요연하게 도출하고 통계 보고화했습니다.
-  * 신뢰도가 보장된 객관적 모니터링 결과를 기초로 하여, 방대한 정성·정량적 지표 속에서 강점과 보완점을 한눈에 파악하는 고유 분석 역량 및 트렌드를 선도하는 디지털 마케팅 안목을 견고히 다졌습니다.
-
------------------------------------------
-3. 보유 지표 기획 / 기술 세부 사항 (Detailed Skillset)
------------------------------------------
-■ Design (디자인 영역)
-  - Figma (90%) : Figma 기반 화면 설계, 유저 플로우 도출 및 정보 구조화 설계
-  - 미리캔버스 (95%) : SNS 배너, 상세페이지 템플릿의 고속 기획 및 레이아웃 배치
-  - Photoshop (80%) : 시각 디자인 보정, 썸네일 합성 및 키비주얼 그래픽 리터칭
-
-■ Data & Marketing (데이터 및 분석 마케팅 영역)
-  - Google Analytics (GA4) (85%) : 디지털 채널 정량 수치 모니터링 및 퍼널 전환 로그 분석
-  - Excel (90%) : 피벗 테이블 설계, 다차원 통계 자료 가공 및 대시보드 구조화
-
-■ Planning (전략 기획 영역)
-  - PPT 기획 (95%) : 프레젠테이션 스토리라인 설계, 논리적 제안서 및 기획 문서 작성
-  - ChatGPT Prompting (90%) : 맞춤형 페르소나 설정 및 시장 트렌드 마이닝 최적화 프롬프트 설계
-
-=========================================
-위의 모든 기재사항은 사실과 다름없음을 엄숙히 확인합니다.
-작성자 : 신윤섭
-=========================================`;
-
 interface AdminSiteSettingsProps {
   config: ProfileConfig;
   onUpdateConfig: (updated: ProfileConfig) => void;
@@ -135,7 +69,6 @@ export default function AdminSiteSettings({
   const [formPhone, setFormPhone] = useState(config.phone);
   const [formSummary, setFormSummary] = useState(config.summary);
   const [formHeroHeadline, setFormHeroHeadline] = useState(config.heroHeadline || "체계적인 지표 분석부터 실무형 기획, 시각적 커뮤니케이션까지 확실한 결과물을 만듭니다.");
-  const [formResumeText, setFormResumeText] = useState(config.resumeText ?? DEFAULT_RESUME_TEXT);
   
   // Education
   const [eduYear, setEduYear] = useState(config.eduYear ?? "청주대학교");
@@ -194,7 +127,6 @@ export default function AdminSiteSettings({
         config.phone !== formPhone.trim() ||
         config.summary !== formSummary.trim() ||
         config.heroHeadline !== formHeroHeadline.trim() ||
-        config.resumeText !== formResumeText ||
         config.eduYear !== eduYear.trim() ||
         config.eduTitle !== eduTitle.trim() ||
         config.eduSubtitle !== eduSubtitle.trim() ||
@@ -233,7 +165,6 @@ export default function AdminSiteSettings({
           phone: formPhone.trim(),
           summary: formSummary.trim(),
           heroHeadline: formHeroHeadline.trim(),
-          resumeText: formResumeText,
           
           eduYear: eduYear.trim(),
           eduTitle: eduTitle.trim(),
@@ -282,7 +213,7 @@ export default function AdminSiteSettings({
     
     return () => clearTimeout(timer);
   }, [
-    formName, formEmail, formPhone, formSummary, formHeroHeadline, formResumeText,
+    formName, formEmail, formPhone, formSummary, formHeroHeadline,
     eduYear, eduTitle, eduSubtitle,
     internYear, internTitle, internSubtitle,
     intern2Year, intern2Title, intern2Subtitle,
@@ -456,25 +387,6 @@ export default function AdminSiteSettings({
               rows={4}
               className="w-full bg-[#121316] border border-[#272735] rounded-lg p-3 text-xs text-zinc-200 focus:outline-none focus:border-[#8b5cf6] leading-relaxed resize-none font-normal"
               placeholder="본인의 대외 활동 경력 기획 혹은 OOH 역량 정보 등을 포괄적으로 기재하세요."
-            />
-          </div>
-
-          {/* Detailed Resume Text customization textbox */}
-          <div className="pt-4 border-t border-[#272735]/40 mt-2">
-            <label className="block text-[11px] font-bold text-zinc-400 mb-1.5 flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-[#a78bfa]" />
-              상세 이력서 다운로드 문서 본문 (포트폴리오 다운로드 내용) *
-            </label>
-            <p className="text-[10px] text-zinc-500 mb-2 leading-relaxed">
-              프로필 화면에서 <strong>[상세 이력서 다운로드]</strong> 버튼을 클릭할 때 저장되는 텍스트 파일(.txt)의 전체 본문을 직접 편집합니다. 줄바꿈과 자유 서식을 지원하며 보관/출력용 문서 양식 편집이 가능합니다.
-            </p>
-            <textarea
-              value={formResumeText}
-              onChange={(e) => setFormResumeText(e.target.value)}
-              required
-              rows={12}
-              className="w-full bg-[#121316] border border-[#272735] rounded-lg p-3 text-[11px] text-zinc-300 focus:outline-none focus:border-[#a78bfa] leading-relaxed resize-y font-mono"
-              placeholder="상세 이력서 서술 양식 내용 기입..."
             />
           </div>
         </div>

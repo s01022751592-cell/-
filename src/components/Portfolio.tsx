@@ -3,7 +3,8 @@ import { Project } from "../types";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Calendar, Tag, Layers, X, ExternalLink, Image as ImageIcon, 
-  Sparkles, Filter, CheckCircle2, Video, ZoomIn, ChevronDown, ChevronUp 
+  Sparkles, Filter, CheckCircle2, Video, ZoomIn, ChevronDown, ChevronUp,
+  ChevronLeft, ChevronRight 
 } from "lucide-react";
 
 const getYoutubeEmbedUrl = (url: string) => {
@@ -29,6 +30,7 @@ export default function Portfolio({ projects, isStandalone = false, onBackToHome
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeTab, setActiveTab] = useState<string>("전체");
   const [activeMediaTab, setActiveMediaTab] = useState<"image" | "video">("image");
+  const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState<number>(6);
 
@@ -170,6 +172,7 @@ export default function Portfolio({ projects, isStandalone = false, onBackToHome
                 onClick={() => {
                   setSelectedProject(project);
                   setActiveMediaTab(project.videoUrl ? "video" : "image");
+                  setActiveImageIndex(0);
                 }}
                 className="group bg-white rounded-2xl border border-zinc-200/80 overflow-hidden hover:border-[#8b5cf6]/50 shadow-sm hover:shadow-[0_16px_36px_rgba(139,92,246,0.08)] transition-colors duration-200 cursor-pointer flex flex-col h-full"
                 id={`project-card-${project.id}`}
@@ -287,6 +290,7 @@ export default function Portfolio({ projects, isStandalone = false, onBackToHome
 
               {/* Modal Body Container */}
               <motion.div
+                id="portfolio-modal-card"
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -358,30 +362,103 @@ export default function Portfolio({ projects, isStandalone = false, onBackToHome
                           />
                         )
                       )
-                    ) : (
-                      <div 
-                        onClick={() => setLightboxImage(selectedProject.imageUrl)}
-                        className="w-full h-full relative cursor-zoom-in group/img overflow-hidden"
-                        title="클릭하여 원본 이미지 크게 보기"
-                      >
-                        <img
-                          src={selectedProject.imageUrl}
-                          alt={selectedProject.title}
-                          referrerPolicy="no-referrer"
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-[1.03]"
-                        />
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-2">
-                          <ZoomIn className="w-8 h-8 text-white drop-shadow-md" />
-                          <span className="text-white text-xs font-bold bg-black/50 px-2.5 py-1 rounded">원본 이미지 크게 보기</span>
+                    ) : (() => {
+                      const allProjectImages = [
+                        selectedProject.imageUrl,
+                        ...(selectedProject.extraImages || [])
+                      ].filter(Boolean);
+                      const currentImg = allProjectImages[activeImageIndex] || selectedProject.imageUrl;
+                      return (
+                        <div className="w-full h-full relative group/img overflow-hidden">
+                          <div 
+                            onClick={() => setLightboxImage(currentImg)}
+                            className="w-full h-full cursor-zoom-in relative"
+                            title="클릭하여 원본 이미지 크게 보기"
+                          >
+                            <img
+                              src={currentImg}
+                              alt={`${selectedProject.title} - 이미지 ${activeImageIndex + 1}`}
+                              referrerPolicy="no-referrer"
+                              className="w-full h-full object-cover transition-transform duration-500 hover:scale-[1.03]"
+                            />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-2">
+                              <ZoomIn className="w-7 h-7 text-white drop-shadow-md" />
+                              <span className="text-white text-xs font-bold bg-black/50 px-2.5 py-1 rounded">원본 이미지 크게 보기</span>
+                            </div>
+                          </div>
+
+                          {/* Navigation Arrows */}
+                          {allProjectImages.length > 1 && (
+                            <>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setActiveImageIndex((prev) => (prev === 0 ? allProjectImages.length - 1 : prev - 1));
+                                }}
+                                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center border border-white/10 hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-lg z-20"
+                                title="이전 이미지"
+                              >
+                                <ChevronLeft className="w-5 h-5 pointer-events-none" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setActiveImageIndex((prev) => (prev === allProjectImages.length - 1 ? 0 : prev + 1));
+                                }}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center border border-white/10 hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-lg z-20"
+                                title="다음 이미지"
+                              >
+                                <ChevronRight className="w-5 h-5 pointer-events-none" />
+                              </button>
+                            </>
+                          )}
+
+                          {/* Number Indicator badge */}
+                          {allProjectImages.length > 1 && (
+                            <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-bold text-zinc-300 border border-zinc-800/50 z-20 select-none">
+                              {activeImageIndex + 1} / {allProjectImages.length}
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    )}
+                      );
+                    })()}
                     
                     {/* Tag badge on top of image */}
                     <div className="absolute top-3 left-3 bg-black/80 backdrop-blur px-2.5 py-1 rounded text-xs font-semibold text-[#a78bfa] border border-[#8b5cf6]/30 select-none">
                       {selectedProject.period ? "실무 기획 및 성과 분석" : "실무 프로젝트"}
                     </div>
                   </div>
+
+                  {/* Interactive Slideshow Thumbnails */}
+                  {(() => {
+                    const allProjectImages = [
+                      selectedProject.imageUrl,
+                      ...(selectedProject.extraImages || [])
+                    ].filter(Boolean);
+                    
+                    if (allProjectImages.length <= 1 || activeMediaTab !== "image") return null;
+                    
+                    return (
+                      <div className="flex items-center gap-2 overflow-x-auto py-2 px-1 max-w-full justify-center mt-3 bg-black/10 border border-zinc-800/10 rounded-xl [scrollbar-width:none] [-ms-overflow-style:none]">
+                        {allProjectImages.map((img, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => setActiveImageIndex(idx)}
+                            className={`relative w-14 sm:w-16 h-9 sm:h-10 rounded-lg overflow-hidden border-2 shrink-0 transition-all cursor-pointer ${
+                              idx === activeImageIndex 
+                                ? "border-[#8b5cf6] scale-[1.04] shadow-[0_0_8px_rgba(139,92,246,0.4)]" 
+                                : "border-zinc-800 opacity-50 hover:opacity-100 hover:border-zinc-700"
+                            }`}
+                          >
+                            <img src={img} alt={`Slide thumbnail ${idx+1}`} className="w-full h-full object-cover" />
+                          </button>
+                        ))}
+                      </div>
+                    );
+                  })()}
                 </div>
 
                 {/* Tags row */}
@@ -458,9 +535,16 @@ export default function Portfolio({ projects, isStandalone = false, onBackToHome
                       {selectedProject.extraImages.map((extraImg, idx) => (
                         <div 
                           key={idx} 
-                          onClick={() => setLightboxImage(extraImg)}
-                          className="rounded-lg overflow-hidden border border-[#272735] aspect-video w-full bg-[#1e202a] cursor-zoom-in relative group/extra transition-transform duration-300"
-                          title="클릭하여 원본 이미지 크게 보기"
+                          onClick={() => {
+                            setActiveMediaTab("image");
+                            setActiveImageIndex(idx + 1);
+                            const modal = document.getElementById("portfolio-modal-card");
+                            if (modal) {
+                              modal.scrollTo({ top: 0, behavior: "smooth" });
+                            }
+                          }}
+                          className="rounded-lg overflow-hidden border border-[#272735] aspect-video w-full bg-[#1e202a] cursor-pointer relative group/extra transition-transform duration-300 animate-fade-in"
+                          title="클릭하여 위쪽 메인 슬라이드와 연동"
                         >
                           <img
                             src={extraImg}
@@ -468,9 +552,9 @@ export default function Portfolio({ projects, isStandalone = false, onBackToHome
                             referrerPolicy="no-referrer"
                             className="w-full h-full object-cover transition-transform duration-500 group-hover/extra:scale-[1.03]"
                           />
-                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/extra:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-1">
-                            <ZoomIn className="w-5 h-5 text-white drop-shadow" />
-                            <span className="text-white text-[10px] sm:text-xs font-bold bg-black/60 px-2 py-0.5 rounded">원본 보기</span>
+                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/extra:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-1.5 text-center px-2">
+                            <ZoomIn className="w-5 h-5 text-[#c4b5fd] drop-shadow" />
+                            <span className="text-white text-[10px] sm:text-xs font-bold bg-black/60 px-2 py-0.5 rounded">메인 슬라이드로 바로보기</span>
                           </div>
                         </div>
                       ))}
